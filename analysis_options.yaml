@@ -1,0 +1,19 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
+    prefer_single_quotes: true
+    always_use_package_imports: true
+    sized_box_for_whitespace: true
+    use_decorated_box: true
+    use_colored_box: true
+    use_enums: true
+    use_super_parameters: true
+    prefer_const_constructors: true
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
