@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_demo/core/core.dart';
 
@@ -88,7 +87,7 @@ class CustomNetWorkWidget extends StatelessWidget {
         alignment: Alignment.center,
         child:
             initials.isEmpty
-                ? Icon(Icons.broken_image_rounded)
+                ? const Icon(Icons.broken_image_rounded)
                 : Text(
                   initials,
                   style: context.textTheme.bodyLarge?.copyWith(
@@ -173,7 +172,7 @@ class CustomNetWorkWidget extends StatelessWidget {
         //   fit: BoxFit.cover,
         // ),
       ),
-      child: Icon(Icons.broken_image_rounded),
+      child: const Icon(Icons.broken_image_rounded),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class SecureStorage {
   const SecureStorage._();
 
-  static final SecureStorage instance = SecureStorage._();
+  static final SecureStorage instance = const SecureStorage._();
 
   static final Map<String, String> _syncData = {};
 

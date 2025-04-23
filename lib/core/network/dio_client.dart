@@ -8,10 +8,12 @@ class DioClient {
   DioClient({required Dio dio})
     : _dio =
           dio
-            ..options.connectTimeout = Duration(
+            ..options.connectTimeout = const Duration(
               milliseconds: kConnectionTimeOut,
             )
-            ..options.receiveTimeout = Duration(milliseconds: kRecieveTimeOut)
+            ..options.receiveTimeout = const Duration(
+              milliseconds: kRecieveTimeOut,
+            )
             ..options.baseUrl = sl<EnvHelper>().get('API_BASE_URL');
 
   final Dio _dio;

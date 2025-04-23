@@ -7,8 +7,7 @@ abstract class AppException implements Exception {
 }
 
 class ServerException extends AppException {
-  ServerException(super.message, super.exception, {this.statusCode});
-
+  ServerException(super.message, [super.exception, this.statusCode]);
   final int? statusCode;
 }
 

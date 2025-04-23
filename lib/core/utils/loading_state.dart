@@ -56,7 +56,7 @@ extension LoadingStateExtension<T> on BaseState<T> {
     };
   }
 
-  void listenWhen<A>({
+  void listenWhen({
     void Function()? initial,
     void Function()? loading,
     void Function(T data)? success,
@@ -83,5 +83,28 @@ extension LoadingStateExtension<T> on BaseState<T> {
       },
       _ => context.showLoading(),
     };
+  }
+
+  T get(T Function() orElse) {
+    if (!this.isSuccess) {
+      return orElse.call();
+    }
+    return (this as Success<T>).data;
+  }
+
+  T? getOrNull() {
+    if (!this.isSuccess) {
+      return null;
+    }
+    return (this as Success<T>).data;
+  }
+
+  AppException getException() {
+    if (!this.isFailure) {
+      return throw (UnknownException(
+        'State is not failure. Current state: $this',
+      ));
+    }
+    return (this as Failure<T, AppException>).exception;
   }
 }

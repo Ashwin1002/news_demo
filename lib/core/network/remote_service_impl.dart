@@ -3,31 +3,10 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_demo/core/core.dart';
+import 'package:news_demo/core/network/interceptors/auth_interceptor.dart';
 
 @Injectable(as: RemoteService)
 class RemoteServiceImpl extends RemoteService {
-  @override
-  Future<dynamic> delete({
-    required Dio dio,
-    required String endPoint,
-    bool isTokenRequired = false,
-    CancelToken? cancelToken,
-  }) async {
-    try {
-      final response = await DioClient(dio: dio)
-          .addInterceptors([
-            // Interceptors here
-          ])
-          .delete('${dio.options.baseUrl}/$endPoint', cancelToken: cancelToken);
-      if (response.statusCode == 204) {
-        return;
-      }
-      return response.data;
-    } on DioException catch (err) {
-      throw ServerException(_getErrorMessage(err), err.stackTrace);
-    }
-  }
-
   @override
   Future<dynamic> get({
     required Dio dio,
@@ -39,9 +18,7 @@ class RemoteServiceImpl extends RemoteService {
   }) async {
     try {
       final response = await DioClient(dio: dio)
-          .addInterceptors([
-            // Interceptors here
-          ])
+          .addInterceptors([AuthInterceptor(isTokenRequired: isTokenRequired)])
           .get(
             '${dio.options.baseUrl}/$endPoint',
             onReceiveProgress: onRecieveProgress,
@@ -51,6 +28,7 @@ class RemoteServiceImpl extends RemoteService {
       if (response.statusCode == 204) {
         return;
       }
+
       return response.data;
     } on DioException catch (err) {
       throw ServerException(_getErrorMessage(err), err.stackTrace);
@@ -71,9 +49,7 @@ class RemoteServiceImpl extends RemoteService {
   }) async {
     try {
       final response = await DioClient(dio: dio)
-          .addInterceptors([
-            // Interceptors here
-          ])
+          .addInterceptors([AuthInterceptor(isTokenRequired: isTokenRequired)])
           .patch(
             '${dio.options.baseUrl}/$endPoint',
             queryParameters: queryParameters,
@@ -102,9 +78,7 @@ class RemoteServiceImpl extends RemoteService {
   }) async {
     try {
       final response = await DioClient(dio: dio)
-          .addInterceptors([
-            // Interceptors here
-          ])
+          .addInterceptors([AuthInterceptor(isTokenRequired: isTokenRequired)])
           .post(
             '${dio.options.baseUrl}/$endPoint',
             queryParameters: queryParameters,
@@ -133,9 +107,7 @@ class RemoteServiceImpl extends RemoteService {
   }) async {
     try {
       final response = await DioClient(dio: dio)
-          .addInterceptors([
-            // Interceptors here
-          ])
+          .addInterceptors([AuthInterceptor(isTokenRequired: isTokenRequired)])
           .put(
             '${dio.options.baseUrl}/$endPoint',
             queryParameters: queryParameters,
@@ -144,6 +116,26 @@ class RemoteServiceImpl extends RemoteService {
             onReceiveProgress: onRecieveProgress,
             onSendProgress: onSendProgress,
           );
+      return response.data;
+    } on DioException catch (err) {
+      throw ServerException(_getErrorMessage(err), err.stackTrace);
+    }
+  }
+
+  @override
+  Future<dynamic> delete({
+    required Dio dio,
+    required String endPoint,
+    bool isTokenRequired = false,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await DioClient(dio: dio)
+          .addInterceptors([AuthInterceptor(isTokenRequired: isTokenRequired)])
+          .delete('${dio.options.baseUrl}/$endPoint', cancelToken: cancelToken);
+      if (response.statusCode == 204) {
+        return;
+      }
       return response.data;
     } on DioException catch (err) {
       throw ServerException(_getErrorMessage(err), err.stackTrace);
