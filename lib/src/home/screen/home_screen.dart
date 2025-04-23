@@ -34,10 +34,13 @@ class _HomeView extends StatefulWidget {
 class __HomeViewState extends State<_HomeView> {
   late final ScrollController _controller;
 
+  late final TextEditingController _search;
+
   @override
   void initState() {
     super.initState();
     _controller = ScrollController()..addListener(_onScrollEndListener);
+    _search = TextEditingController();
   }
 
   @override
@@ -53,6 +56,7 @@ class __HomeViewState extends State<_HomeView> {
 
   @override
   void dispose() {
+    _search.dispose();
     _controller
       ..removeListener(_onScrollEndListener)
       ..dispose();
@@ -63,11 +67,19 @@ class __HomeViewState extends State<_HomeView> {
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(
       onRefresh: () async {
-        context.read<HomeBloc>().add(const FetchArticles(isRefresh: true));
+        context.read<HomeBloc>().add(
+          FetchArticles(isRefresh: true, query: _search.text),
+        );
       },
       child: CustomScrollView(
         controller: _controller,
         slivers: [
+          BlocSelector<HomeBloc, HomeState, bool>(
+            selector: (state) => state.articles.isSuccess,
+            builder: (context, state) {
+              return PinnedHeaderSliver(child: Searchbar(search: _search));
+            },
+          ),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (p, c) {
               return p.articles != c.articles;

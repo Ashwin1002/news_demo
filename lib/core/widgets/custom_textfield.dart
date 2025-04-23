@@ -52,39 +52,51 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
           ),
-        TextFormField(
-          controller: controller,
-          initialValue: initialValue,
-          onChanged: onChanged,
-          validator: validator,
-          obscureText: obscureText,
-          readOnly: isReadOnly,
-          obscuringCharacter: '*',
-          inputFormatters: inputFormatters,
-          textInputAction: textInputAction,
-          keyboardType: keyboardType,
-          minLines: minLines,
-          maxLines: maxLines,
-          maxLength: maxLength,
-          buildCounter:
-              (
-                context, {
-                required currentLength,
-                required isFocused,
-                required maxLength,
-              }) => const SizedBox.shrink(),
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: context.textTheme.bodyLarge?.copyWith(
-              color: context.colorScheme.outline,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              borderSide: BorderSide(color: context.colorScheme.outlineVariant),
-            ),
+        Container(
+          padding: const EdgeInsets.all(AppPadding.large),
+          decoration: BoxDecoration(
+            color: context.colorScheme.outlineVariant.withValues(alpha: .4),
+            borderRadius: const BorderRadius.all(AppRadius.xlarge),
+          ),
+          child: Row(
+            spacing: 4.h,
+            children: [
+              Icon(Icons.search_rounded, color: context.colorScheme.outline),
+              Expanded(
+                child: TextFormField(
+                  controller: controller,
+                  initialValue: initialValue,
+                  onChanged: onChanged,
+                  validator: validator,
+                  obscureText: obscureText,
+                  readOnly: isReadOnly,
+                  obscuringCharacter: '*',
+                  inputFormatters: inputFormatters,
+                  textInputAction: textInputAction,
+                  keyboardType: keyboardType,
+                  minLines: minLines,
+                  maxLines: maxLines,
+                  maxLength: maxLength,
+                  buildCounter:
+                      (
+                        context, {
+                        required currentLength,
+                        required isFocused,
+                        required maxLength,
+                      }) => const SizedBox.shrink(),
+                  decoration: InputDecoration.collapsed(
+                    hintText: hintText,
+                    hintStyle: context.textTheme.bodyLarge?.copyWith(
+                      color: context.colorScheme.outline,
+                    ),
+                    filled: true,
+                    fillColor: context.colorScheme.outlineVariant.withValues(
+                      alpha: .1,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
