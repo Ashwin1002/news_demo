@@ -31,7 +31,8 @@ API_KEY = <YOUR-API-KEY>
     dart run build_runner build -d
 ```
 
-for generating `.g, .freezed, .gr, .config` files. 7. Run the app using `flutter run` command
+for generating `.g, .freezed, .gr, .config` files. 
+7. Run the app using `flutter run` command
 
 ## Preview
 
