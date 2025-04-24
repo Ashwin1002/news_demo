@@ -105,7 +105,6 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
           json['lastUpdated'] = now;
           json['isFavourite'] = 0;
 
-          log('json => $json');
           batch.insert(
             _articleTable,
             json,

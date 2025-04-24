@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -19,9 +19,30 @@ class HomeScreen extends StatelessWidget {
       create: (context) {
         return HomeBloc();
       },
-      child: const Scaffold(
-        appBar: CustomAppbar(title: Text('Home'), hasShadow: true),
-        body: _HomeView(key: ObjectKey('Home Screen View')),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: CustomAppbar(
+              title: const Text('Home'),
+              hasShadow: true,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    context.router.push(
+                      BookmarksRoute(bloc: context.read<HomeBloc>()),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.bookmark,
+                    color: context.colorScheme.secondary,
+                    size: 24.v,
+                  ),
+                ),
+              ],
+            ),
+            body: const _HomeView(key: ObjectKey('Home Screen View')),
+          );
+        },
       ),
     );
   }
@@ -51,7 +72,6 @@ class __HomeViewState extends State<_HomeView> {
     super.didChangeDependencies();
     context.read<HomeBloc>()
       ..add(const CheckNetworkConnection())
-      ..add(const FetchBookMarks())
       ..add(const FetchArticles(isRefresh: true));
   }
 

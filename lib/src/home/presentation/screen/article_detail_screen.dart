@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,8 +46,7 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                   stretch: true,
                   pinned: true,
                   forceElevated: true,
-                  backgroundColor: context.colorScheme.onPrimaryFixedVariant,
-                  leading: BackButton(color: context.colorScheme.surface),
+                  backgroundColor: context.colorScheme.surfaceBright,
                   actions: [
                     BookmarkButton(article: article),
                     8.h.horizontalSpace,
@@ -191,6 +192,7 @@ class BookmarkButton extends StatelessWidget {
             loading: () => child,
             failure: (exception) => child,
             success: (bookmarks) {
+              log('book marks lenfrh => ${bookmarks.length}');
               final bookmark =
                   bookmarks.where((e) => e.url == article.url).firstOrNull;
               return _buildButton(context, bookmark?.isFavourite == true);

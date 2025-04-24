@@ -123,19 +123,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final article = await _remoteRepository.updateBookMark(event.article);
 
     if (article.isRight()) {
-      final updated = article.getRight().getOrElse(() => Article.initial());
-
-      final articles =
-          List<Article>.from(
-            state.articles.get(() => AppResponse.initial()).results,
-          ).map((e) {
-            if (e.url == updated.url && e.publishedAt == updated.publishedAt) {
-              return e.copyWith(isFavourite: updated.isFavourite);
-            }
-            return e;
-          }).toList();
-
-      emit(state.copyWith(bookmarks: Success(articles)));
+      add(const FetchBookMarks());
     }
 
     if (article.isLeft()) {

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_demo/core/core.dart';
 
@@ -23,6 +26,15 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      return CupertinoNavigationBar(
+        backgroundColor: backgroundColor ?? context.colorScheme.surfaceBright,
+        automaticallyImplyMiddle: automaticallyImplyLeading,
+        middle: title,
+        trailing: actions?.firstOrNull,
+        // actions: actions,
+      );
+    }
     return AppBar(
       elevation: 4.0,
       backgroundColor: backgroundColor,
