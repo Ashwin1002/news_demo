@@ -15,7 +15,7 @@ Ensure the following are installed on your system:
 ## Getting Started
 
 1. Register for a new api key from [NewsApi](https://newsapi.org/account)
-2. Clone the project `https://github.com/Ashwin1002/news_demo.git`
+2. Clone the project ```https://github.com/Ashwin1002/news_demo.git```
 3. Create a `.env` file in the root of the project folder
 4. Assign the below variables:
 
