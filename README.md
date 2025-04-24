@@ -59,6 +59,28 @@ for generating `.g, .freezed, .gr, .config` files.
 | stream_transform          | [stream_transform](https://pub.dev/packages/stream_transform)           | Stream transformation utilities            |
 | url_launcher              | [url_launcher](https://pub.dev/packages/url_launcher)                   | Launch URLs in browser or apps             |
 
+## About App Arichitecture & Business Logic
+
+This structure follows the **feature-first** and **clean architecture** approach, where each feature contains its own layers: data, domain, and presentation.
+
+
+### 📂 `data/`
+Contains all data-related logic:
+- `datasource/`: APIs, local DB sources, or any external data services.
+- `model/`: Data models representing the structure of responses or local entities.
+
+### 📂 `domain/`
+Contains business logic and abstractions:
+- `repository/`: Holds abstract repository classes or concrete implementations like `home_repository.dart` that act as bridges between `data` and `presentation`.
+
+### 📂 `presentation/`
+Handles everything UI-related:
+- `bloc/`: Business Logic Components – state management using BLoC pattern.
+- `screen/`: Screens or pages shown to the user.
+- `widgets/`: Reusable UI components specific to the `home` feature.
+
+---
+
 
 ## Preview
 
