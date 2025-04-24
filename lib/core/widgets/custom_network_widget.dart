@@ -58,28 +58,30 @@ class CustomNetWorkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final radius =
+        shape == BoxShape.circle
+            ? null
+            : (borderRadius ?? const BorderRadius.all(AppRadius.medium));
+    final shadow =
+        hasShadow
+            ? [
+              BoxShadow(
+                color: context.colorScheme.onSecondary,
+                blurRadius: 2,
+                offset: const Offset(5, 5),
+                spreadRadius: -2,
+              ),
+            ]
+            : null;
     if (url.isEmpty || !url.startsWith('http')) {
       return Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
           border: boxBorder,
-          borderRadius:
-              shape == BoxShape.circle
-                  ? null
-                  : (borderRadius ?? const BorderRadius.all(AppRadius.medium)),
+          borderRadius: radius,
           shape: shape ?? BoxShape.rectangle,
-          boxShadow:
-              hasShadow
-                  ? [
-                    BoxShadow(
-                      color: context.colorScheme.onSecondary,
-                      blurRadius: 2,
-                      offset: const Offset(5, 5),
-                      spreadRadius: -2,
-                    ),
-                  ]
-                  : null,
+          boxShadow: shadow,
           color:
               backgroundColor ??
               context.colorScheme.onSurface.withValues(alpha: .2),
@@ -108,34 +110,14 @@ class CustomNetWorkWidget extends StatelessWidget {
         imageBuilder:
             (ctx, imageProvider) => Container(
               decoration: BoxDecoration(
+                borderRadius: radius,
                 image: DecorationImage(
                   image: imageProvider,
                   fit: boxFit ?? BoxFit.fill,
                 ),
                 border: boxBorder,
-                borderRadius:
-                    shape == BoxShape.circle
-                        ? null
-                        : (borderRadius ??
-                            const BorderRadius.all(AppRadius.medium)),
                 shape: shape ?? BoxShape.rectangle,
-                boxShadow:
-                    hasShadow
-                        ? [
-                          BoxShadow(
-                            color: context.colorScheme.onTertiary,
-                            blurRadius: 5,
-                            offset: const Offset(5, 5),
-                            spreadRadius: -2,
-                          ),
-                          BoxShadow(
-                            color: context.colorScheme.onTertiary,
-                            blurRadius: 5,
-                            offset: -const Offset(5, 5),
-                            spreadRadius: -2,
-                          ),
-                        ]
-                        : null,
+                boxShadow: shadow,
               ),
             ),
         placeholder: (context, url) {
@@ -144,12 +126,9 @@ class CustomNetWorkWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: context.colorScheme.outlineVariant,
               border: boxBorder,
-              borderRadius: borderRadius,
+              borderRadius: radius,
               shape: shape ?? BoxShape.rectangle,
             ),
-            // child: const Center(
-            //   child: CupertinoActivityIndicator(),
-            // ),
           );
         },
         errorWidget: (context, url, error) => _errorWidget(context),
@@ -165,15 +144,8 @@ class CustomNetWorkWidget extends StatelessWidget {
         color: context.colorScheme.onPrimary,
         borderRadius: borderRadius,
         shape: shape ?? BoxShape.circle,
-        // decorationImage: const DecorationImage(
-        //   image: AssetImage(
-        //     AssetList.logoPng,
-
-        //   ),
-        //   fit: BoxFit.cover,
-        // ),
       ),
-      child: const Icon(Icons.broken_image_rounded),
+      child: Icon(Icons.broken_image_rounded, size: 24.h),
     );
   }
 }

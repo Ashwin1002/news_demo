@@ -8,8 +8,7 @@ Future<void> main() async {
   await Future.wait([
     // injection init
     configureInjection(),
-    // read data from session
-    SecureStorage.instance.readAll(),
+
     // Initialization of EnvHelper
     EnvHelper.init(),
   ]);
