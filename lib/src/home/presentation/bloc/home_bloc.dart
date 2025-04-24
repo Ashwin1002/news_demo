@@ -4,6 +4,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:news_demo/core/core.dart';
 import 'package:news_demo/core/model/app_response/app_response.dart';
 import 'package:news_demo/src/home/data/datasource/home_remote_datasource.dart';
@@ -28,7 +29,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc()
     : _remoteRepository = sl<HomeRepository>(),
       super(HomeState.initial()) {
+    on<CheckNetworkConnection>(_checkConnection, transformer: restartable());
     on<FetchArticles>(_fetchArticles, transformer: throttleDroppable());
+    on<ToogleBookmark>(_toggleBookMark);
+    on<FetchBookMarks>(_fetchBookmarks);
+  }
+
+  FutureOr<void> _checkConnection(
+    CheckNetworkConnection event,
+    Emitter<HomeState> emit,
+  ) async {
+    final stream = sl<InternetConnectionChecker>().onStatusChange;
+    await emit.forEach(
+      stream,
+      onData: (status) {
+        return state.copyWith(connectionStatus: status);
+      },
+    );
   }
 
   FutureOr<void> _fetchArticles(
@@ -83,5 +100,54 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         page: state.page + 1,
       ),
     );
+  }
+
+  FutureOr<void> _fetchBookmarks(
+    FetchBookMarks event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(state.copyWith(bookmarks: const Loading()));
+    final results = await _remoteRepository.fetchBookMarks();
+
+    results.fold(
+      (l) => emit(state.copyWith(bookmarks: Failure(l))),
+      (r) => emit(state.copyWith(bookmarks: Success(r))),
+    );
+  }
+
+  FutureOr<void> _toggleBookMark(
+    ToogleBookmark event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(state.copyWith(bookmarks: const Loading()));
+    final article = await _remoteRepository.updateBookMark(event.article);
+
+    if (article.isRight()) {
+      final updated = article.getRight().getOrElse(() => Article.initial());
+
+      final articles =
+          List<Article>.from(
+            state.articles.get(() => AppResponse.initial()).results,
+          ).map((e) {
+            if (e.url == updated.url && e.publishedAt == updated.publishedAt) {
+              return e.copyWith(isFavourite: updated.isFavourite);
+            }
+            return e;
+          }).toList();
+
+      emit(state.copyWith(bookmarks: Success(articles)));
+    }
+
+    if (article.isLeft()) {
+      emit(
+        state.copyWith(
+          bookmarks: Failure(
+            article.getLeft().getOrElse(
+              () => UnknownException('Unknown error occurred'),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

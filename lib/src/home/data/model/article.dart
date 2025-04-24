@@ -17,10 +17,10 @@ sealed class Article with _$Article {
     @DateTimeConverter() required DateTime publishedAt,
     @Default('') String content,
     @JsonKey(includeToJson: false) bool? isFavourite,
-    @DateTimeConverter() DateTime? createdAt,
-    @DateTimeConverter() DateTime? updatedAt,
   }) = _Article;
 
   factory Article.fromJson(Map<String, dynamic> json) =>
       _$ArticleFromJson(json);
+
+  factory Article.initial() => Article(publishedAt: DateTime(2000));
 }

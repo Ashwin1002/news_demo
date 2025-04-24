@@ -13,6 +13,10 @@ abstract class HomeRepository {
     int? pageSize,
     int page = 1,
   });
+
+  EitherFutureData<List<Article>> fetchBookMarks();
+
+  EitherFutureData<Article> updateBookMark(Article article);
 }
 
 @Injectable(as: HomeRepository)
@@ -58,7 +62,7 @@ class HomeRepositoryImpl extends HomeRepository {
       return right(articles);
     }
 
-    final totalResult = await _localSource.fetchArticlesCount();
+    final totalResult = await _localSource.fetchArticlesCount(query);
 
     final results = await _localSource.fetchArticles(
       query: query,
@@ -75,5 +79,25 @@ class HomeRepositoryImpl extends HomeRepository {
         ),
       ),
     );
+  }
+
+  @override
+  EitherFutureData<List<Article>> fetchBookMarks() async {
+    try {
+      final results = await _localSource.fetchFavourites();
+      return results.fold((l) => left(l), (r) => right(r));
+    } catch (e) {
+      return left(ExceptionHandler.instance.parseError(e));
+    }
+  }
+
+  @override
+  EitherFutureData<Article> updateBookMark(Article article) async {
+    try {
+      final result = await _localSource.toggleFavourite(article);
+      return result.fold((l) => left(l), (r) => right(r));
+    } catch (e) {
+      return left(ExceptionHandler.instance.parseError(e));
+    }
   }
 }

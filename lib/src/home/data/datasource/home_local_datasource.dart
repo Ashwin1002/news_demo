@@ -20,7 +20,7 @@ abstract class HomeLocalDatasource {
     int page = 0,
   });
 
-  Future<int> fetchArticlesCount();
+  Future<int> fetchArticlesCount(String? query);
 
   EitherFutureData<void> insertArticles(List<Article> articles);
 
@@ -94,6 +94,7 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
 
   @override
   EitherFutureData<void> insertArticles(List<Article> articles) async {
+    log('articles => ${articles.length}');
     try {
       final db = await _database;
       await db.transaction((txn) async {
@@ -102,7 +103,9 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
         for (final a in articles) {
           final json = a.toJson()..removeEmptyValues();
           json['lastUpdated'] = now;
-          json['isFavourite'] = a.isFavourite == true ? 1 : 0;
+          json['isFavourite'] = 0;
+
+          log('json => $json');
           batch.insert(
             _articleTable,
             json,
@@ -123,42 +126,42 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
     int pageSize = 10,
     int page = 0,
   }) async {
-    try {
-      final db = await _database;
-      await _cleanupExpiredTasks(db);
-      final offset = page * pageSize;
-      final whereCl =
-          (query?.trim().isNotEmpty ?? false)
-              ? 'WHERE title LIKE ? OR description LIKE ? OR content LIKE ?'
-              : '';
-      final args =
-          query?.trim().isNotEmpty ?? false
-              ? List.filled(3, '%${query!.trim()}%')
-              : <String>[];
+    // try {
+    final db = await _database;
+    await _cleanupExpiredTasks(db);
+    final offset = page * pageSize;
+    final whereCl =
+        (query?.trim().isNotEmpty ?? false)
+            ? 'WHERE title LIKE ? OR description LIKE ? OR content LIKE ?'
+            : '';
+    final args =
+        query?.trim().isNotEmpty ?? false
+            ? List.filled(3, '%${query!.trim()}%')
+            : <String>[];
 
-      final results = await db.rawQuery(
-        '''
+    final results = await db.rawQuery(
+      '''
         SELECT * FROM $_articleTable
         $whereCl
         ORDER BY publishedAt DESC
         LIMIT ? OFFSET ?
         ''',
-        [...args, pageSize, offset],
-      );
+      [...args, pageSize, offset],
+    );
 
-      final articles = await Isolate.run<List<Article>>(() {
-        return results.map((e) {
-          return Article.fromJson(
-            e,
-          ).copyWith(isFavourite: (e['isFavourite'] as int) == 1);
-        }).toList();
-      });
+    final articles = await Isolate.run<List<Article>>(() {
+      return results.map((e) {
+        final newMap = Map<String, dynamic>.from(e);
+        newMap['isFavourite'] = e['isFavourite'] == 1;
+        return Article.fromJson(newMap);
+      }).toList();
+    });
 
-      log('articles from db => ${articles.length}');
-      return right(articles);
-    } catch (e) {
-      return left(ExceptionHandler.instance.parseError(e));
-    }
+    log('articles from db => ${articles.length}');
+    return right(articles);
+    // } catch (e) {
+    //   return left(ExceptionHandler.instance.parseError(e));
+    // }
   }
 
   @override
@@ -173,9 +176,9 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
       );
       final articles = await Isolate.run<List<Article>>(() {
         return results.map((e) {
-          return Article.fromJson(
-            e,
-          ).copyWith(isFavourite: (e['isFavourite'] as int) == 1);
+          final newMap = Map<String, dynamic>.from(e);
+          newMap['isFavourite'] = e['isFavourite'] == 1;
+          return Article.fromJson(newMap);
         }).toList();
       });
       return right(articles);
@@ -185,14 +188,28 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
   }
 
   @override
-  Future<int> fetchArticlesCount() async {
+  Future<int> fetchArticlesCount(String? query) async {
     try {
       final db = await _database;
       await _cleanupExpiredTasks(db);
-      final result = await db.rawQuery(
-        'SELECT COUNT(*) FROM $kArticleTableName',
+      final whereCl =
+          (query?.trim().isNotEmpty ?? false)
+              ? 'WHERE title LIKE ? OR description LIKE ? OR content LIKE ?'
+              : '';
+      final args =
+          query?.trim().isNotEmpty ?? false
+              ? List.filled(3, '%${query!.trim()}%')
+              : <String>[];
+
+      final results = await db.rawQuery(
+        '''
+        SELECT * FROM $_articleTable
+        $whereCl
+        ''',
+        [...args],
       );
-      return Sqflite.firstIntValue(result) ?? 0;
+
+      return Sqflite.firstIntValue(results) ?? 0;
     } catch (e) {
       return -1;
     }
@@ -209,7 +226,7 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
           SET isFavourite = ((isFavourite | 1) - (isFavourite & 1))
           WHERE url = ? AND publishedAt = ?
       ''',
-        [article.url, article.publishedAt],
+        [article.url, article.publishedAt.toIso8601String()],
       );
 
       if (count == 0) throw LocalDatabaseException('No article updated');
@@ -217,18 +234,19 @@ class HomeLocalDatasourceImpl extends HomeLocalDatasource {
       final results = await db.query(
         kArticleTableName,
         where: 'url = ? AND publishedAt = ?',
-        whereArgs: [article.url, article.publishedAt],
+        whereArgs: [article.url, article.publishedAt.toIso8601String()],
       );
 
       if (results.isEmpty) {
         throw LocalDatabaseException('Article not found');
       }
 
-      final updatedArticle = Article.fromJson(
-        results.firstOrNull ?? {},
-      ).copyWith(
-        isFavourite: (results.firstOrNull?['isFavourite'] as int) == 1,
-      );
+      final updatedResult = {
+        ...?results.firstOrNull,
+        'isFavourite': results.firstOrNull?['isFavourite'] == 1,
+      };
+
+      final updatedArticle = Article.fromJson(updatedResult);
 
       return right(updatedArticle);
     } catch (e) {

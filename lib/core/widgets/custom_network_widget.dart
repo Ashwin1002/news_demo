@@ -93,6 +93,7 @@ class CustomNetWorkWidget extends StatelessWidget {
                   style: context.textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: fontSize,
+                    color: context.colorScheme.surface,
                   ),
                 ),
       );

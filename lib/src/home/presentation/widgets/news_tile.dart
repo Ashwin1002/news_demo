@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_demo/core/core.dart';
 import 'package:news_demo/src/home/data/model/article.dart';
+import 'package:news_demo/src/home/presentation/bloc/home_bloc.dart';
 
 class NewsTile extends StatelessWidget {
   const NewsTile({super.key, required this.article});
@@ -10,7 +13,11 @@ class NewsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapBouncer(
-      onTap: () {},
+      onTap: () {
+        context.router.push(
+          ArticleDetailRoute(bloc: context.read<HomeBloc>(), article: article),
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppPadding.medium,

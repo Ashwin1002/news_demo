@@ -34,7 +34,7 @@ class Snack {
     _show(
       context,
       message,
-      backgroundColor: context.colorScheme.onPrimary,
+      backgroundColor: context.colorScheme.primary,
       icon: Icons.check,
     );
   }
