@@ -35,7 +35,7 @@ for generating `.g, .freezed, .gr, .config` files.
 
 7. Run the app using `flutter run` command
 
-## Depedencies
+## Dependencies
 | Dependency                | Package                                                                 | Usage                                      |
 |---------------------------|-------------------------------------------------------------------------|--------------------------------------------|
 | auto_route                | [auto_route](https://pub.dev/packages/auto_route)                       | Declarative routing for Flutter            |
@@ -59,7 +59,7 @@ for generating `.g, .freezed, .gr, .config` files.
 | stream_transform          | [stream_transform](https://pub.dev/packages/stream_transform)           | Stream transformation utilities            |
 | url_launcher              | [url_launcher](https://pub.dev/packages/url_launcher)                   | Launch URLs in browser or apps             |
 
-## About App Arichitecture & Business Logic
+## About App Arichitecture 
 
 This structure follows the **feature-first** and **clean architecture** approach, where each feature contains its own layers: data, domain, and presentation.
 
@@ -81,6 +81,9 @@ Handles everything UI-related:
 
 ---
 
+## Business Logic
+
+The app is offline & online synced. The state is managed via [flutter_bloc](https://pub.dev/packages/flutter_bloc). Paginated list is fetched from the server when success, the results are saved into the local database via [sqflite](https://pub.dev/packages/sqflite). The data is cached for 24 hours, which will be deleted if the datasource is called in the repository after 24 hours and new data will be stored. [internet_connection_checker](https://pub.dev/packages/internet_connection_checker) checks the network state and fetch accordingly from local or server each time the network state changes. Additionaly, bookmarks is also saved in the local database which can be toggled from the detail page.
 
 ## Preview
 
