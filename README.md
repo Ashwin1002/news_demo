@@ -35,6 +35,35 @@ for generating `.g, .freezed, .gr, .config` files.
 
 7. Run the app using `flutter run` command
 
+## Depedencies
+| Dependency                | Package                                                                 | Usage                                      |
+|---------------------------|-------------------------------------------------------------------------|--------------------------------------------|
+| auto_route                | [auto_route](https://pub.dev/packages/auto_route)                       | Declarative routing for Flutter            |
+| bloc_concurrency          | [bloc_concurrency](https://pub.dev/packages/bloc_concurrency)           | Controls event concurrency in BLoC         |
+| cached_network_image      | [cached_network_image](https://pub.dev/packages/cached_network_image)   | Caching and displaying network images      |
+| cupertino_icons           | [cupertino_icons](https://pub.dev/packages/cupertino_icons)             | iOS style icons                            |
+| dio                       | [dio](https://pub.dev/packages/dio)                                     | Powerful HTTP client for Dart              |
+| equatable                 | [equatable](https://pub.dev/packages/equatable)                         | Simplifies value comparisons               |
+| flutter                   | [flutter](https://flutter.dev)                                          | Flutter SDK                                |
+| flutter_bloc              | [flutter_bloc](https://pub.dev/packages/flutter_bloc)                   | BLoC pattern state management              |
+| flutter_dotenv            | [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)               | Load environment variables                 |
+| flutter_secure_storage    | [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage)| Store sensitive data securely              |
+| flutter_svg               | [flutter_svg](https://pub.dev/packages/flutter_svg)                     | Render SVG images                          |
+| fpdart                    | [fpdart](https://pub.dev/packages/fpdart)                               | Functional programming tools for Dart      |
+| freezed_annotation        | [freezed_annotation](https://pub.dev/packages/freezed_annotation)       | Annotations for the Freezed package        |
+| get_it                    | [get_it](https://pub.dev/packages/get_it)                               | Simple service locator for dependency injection |
+| google_fonts              | [google_fonts](https://pub.dev/packages/google_fonts)                   | Use Google Fonts in Flutter                |
+| injectable                | [injectable](https://pub.dev/packages/injectable)                       | Dependency injection generator             |
+| internet_connection_checker| [internet_connection_checker](https://pub.dev/packages/internet_connection_checker) | Check internet connectivity         |
+| intl                      | [intl](https://pub.dev/packages/intl)                                   | Updating Date Format    |
+| json_annotation           | [json_annotation](https://pub.dev/packages/json_annotation)             | JSON serialization annotations             |
+| path                      | [path](https://pub.dev/packages/path)                                   | Manipulate file paths                      |
+| skeletonizer             | [skeletonizer](https://pub.dev/packages/skeletonizer)                   | Skeleton loading animation                 |
+| sqflite                   | [sqflite](https://pub.dev/packages/sqflite)                             | SQLite plugin for Flutter                  |
+| stream_transform          | [stream_transform](https://pub.dev/packages/stream_transform)           | Stream transformation utilities            |
+| url_launcher              | [url_launcher](https://pub.dev/packages/url_launcher)                   | Launch URLs in browser or apps             |
+
+
 ## Preview
 
 | Page          | Android                                                                                   | IOS                                                                                       |
