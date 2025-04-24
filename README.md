@@ -32,6 +32,7 @@ API_KEY = <YOUR-API-KEY>
 ```
 
 for generating `.g, .freezed, .gr, .config` files. 
+
 7. Run the app using `flutter run` command
 
 ## Preview
