@@ -8,6 +8,7 @@ part 'article.g.dart';
 sealed class Article with _$Article {
   const Article._();
   factory Article({
+    @Default(-1) int id,
     @Default('') String author,
     @Default('') String title,
     @Default('') String description,
@@ -15,6 +16,9 @@ sealed class Article with _$Article {
     @Default('') String urlToImage,
     @DateTimeConverter() required DateTime publishedAt,
     @Default('') String content,
+    @JsonKey(includeToJson: false) bool? isFavourite,
+    @DateTimeConverter() DateTime? createdAt,
+    @DateTimeConverter() DateTime? updatedAt,
   }) = _Article;
 
   factory Article.fromJson(Map<String, dynamic> json) =>

@@ -5,7 +5,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:news_demo/core/core.dart';
 import 'package:news_demo/core/model/app_response/app_response.dart';
-import 'package:news_demo/src/home/model/article.dart';
+import 'package:news_demo/src/home/data/model/article.dart';
 
 enum ArticleSort {
   relevancy('Relevance', 'relevancy'),
@@ -17,7 +17,7 @@ enum ArticleSort {
   final String value;
 }
 
-abstract class HomeRemoteRepository {
+abstract class HomeRemoteDataSource {
   EitherFutureData<AppResponse<Article>> fetchArticles({
     String? query,
     ArticleSort? sort,
@@ -26,8 +26,8 @@ abstract class HomeRemoteRepository {
   });
 }
 
-@Injectable(as: HomeRemoteRepository)
-class HomeRemoteRepositoryImpl extends HomeRemoteRepository {
+@Injectable(as: HomeRemoteDataSource)
+class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   final RemoteService _networkService = sl<RemoteService>();
   @override
   EitherFutureData<AppResponse<Article>> fetchArticles({

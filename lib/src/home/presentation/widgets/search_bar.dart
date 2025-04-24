@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_demo/core/core.dart';
-import 'package:news_demo/src/home/bloc/home/home_bloc.dart';
+import 'package:news_demo/src/home/presentation/bloc/home_bloc.dart';
 
 class Searchbar extends StatelessWidget {
   const Searchbar({super.key, required TextEditingController search})
@@ -14,7 +14,8 @@ class Searchbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: context.colorScheme.surface,
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.medium,
         vertical: AppPadding.large,

@@ -6,8 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:news_demo/core/core.dart';
 import 'package:news_demo/core/model/app_response/app_response.dart';
-import 'package:news_demo/src/home/model/article.dart';
-import 'package:news_demo/src/home/repository/home_remote_repository.dart';
+import 'package:news_demo/src/home/data/datasource/home_remote_datasource.dart';
+import 'package:news_demo/src/home/data/model/article.dart';
+import 'package:news_demo/src/home/domain/repository/home_repository.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'home_event.dart';
@@ -23,9 +24,9 @@ EventTransformer<E> throttleDroppable<E>([Duration? duration]) {
 }
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final HomeRemoteRepository _remoteRepository;
+  final HomeRepository _remoteRepository;
   HomeBloc()
-    : _remoteRepository = sl<HomeRemoteRepository>(),
+    : _remoteRepository = sl<HomeRepository>(),
       super(HomeState.initial()) {
     on<FetchArticles>(_fetchArticles, transformer: throttleDroppable());
   }
@@ -47,10 +48,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
 
     if (state.articles.isLoading) {
-      final result = await _remoteRepository.fetchArticles(
-        query: event.query,
-        sort: event.sort,
-      );
+      final result = await _remoteRepository.fetchArticles(query: event.query);
 
       result.fold(
         (l) => emit(state.copyWith(articles: Failure(l))),
@@ -61,7 +59,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     final result = await _remoteRepository.fetchArticles(
       query: event.query,
-      sort: event.sort,
       page: state.page,
     );
 

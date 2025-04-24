@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_demo/core/core.dart';
 import 'package:news_demo/core/model/app_response/app_response.dart';
-import 'package:news_demo/src/home/bloc/home/home_bloc.dart';
-import 'package:news_demo/src/home/widgets/widgets.dart';
+import 'package:news_demo/src/home/presentation/bloc/home_bloc.dart';
+import 'package:news_demo/src/home/presentation/widgets/widgets.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_demo/core/core.dart';
-import 'package:news_demo/src/home/model/article.dart';
+import 'package:news_demo/src/home/data/model/article.dart';
 
 class NewsTile extends StatelessWidget {
   const NewsTile({super.key, required this.article});

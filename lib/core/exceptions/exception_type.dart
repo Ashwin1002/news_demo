@@ -24,6 +24,10 @@ class ParseException extends AppException {
   ParseException(super.message, [super.exception]);
 }
 
+class LocalDatabaseException extends AppException {
+  LocalDatabaseException(super.message, [super.exception]);
+}
+
 class UnknownException extends AppException {
   UnknownException(super.message, [super.exception]);
 }
